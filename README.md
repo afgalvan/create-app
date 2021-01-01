@@ -1,6 +1,6 @@
-# create-web-app.
+# create-app.
 
-Basic web-app template.
+Basic project template.
 
 ## Requiriments.
 
@@ -16,8 +16,16 @@ Basic web-app template.
 
 ## To install template manager (create-app).
 
+Install it with curl:
+
 ```
 curl -sL https://raw.githubusercontent.com/afgalvan/create-app/web/installer.sh | bash -s
+```
+
+Create a new alias
+
+```
+echo "alias create-app=$HOME/.config/create-app/create_app.sh" >> ~/.bashrc
 ```
 
 ---
