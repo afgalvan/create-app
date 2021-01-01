@@ -15,4 +15,3 @@ if [ -d ~/.config/create-app/create_app.sh ]; then
     rm -f ~/.config/create-app/create_app.sh
 fi
 mv create_app.sh ~/.config/create-app/
-echo "alias create-app=$HOME/.config/create-app/create_app.sh" >> ~/.bashrc

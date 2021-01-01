@@ -96,7 +96,7 @@ main() {
     fi
 
     repo_url=https://github.com/afgalvan/create-app.git
-    git clone -q "$repo_url" "$1"
+    git clone -b web -q "$repo_url" "$1"
     cd "$project_name"
     echo "# $project_name" > README.md
     rm -rf .git/
