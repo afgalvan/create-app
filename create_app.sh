@@ -6,7 +6,7 @@ RED="\e[31m"
 GREEN="\e[32m"
 CYAN="\e[36m"
 RESET="\e[0m"
-VERSION="v.0.2-alpha"
+VERSION="v.0.2.1-alpha"
 settings=()
 
 title() {
