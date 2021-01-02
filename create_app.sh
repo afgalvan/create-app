@@ -89,6 +89,8 @@ is_template_valid() {
         return 0
     elif [ "$template" == "py" ] || [ "$template" == "python" ]; then
         return 0
+    elif [ "$template" == "java" ]; then
+        return 0
     else
         echo -e "$RED Error on template name \"$template\"."
         exit 1
@@ -97,15 +99,27 @@ is_template_valid() {
 
 prompt_help() {
     title
-    echo "Help"
+    echo -e "\n   Usage: create-app <project-name> [package-manager] [template]"
+    echo "   If optional arguments are not provide, it will use your default settings."
+
+    echo -e "\n   Help information"
+    echo -e "\n   Commands:"
+    echo -e "     -h, --help                                              Displays help information for command usage.
+     -v, --version                                           Show create-app current version.
+     -d, --defaults                                          Show your default settings.
+     -t, --templates                                         Show available templates to use.
+     -sp, --set-package-manager, --set-pm <package-manager>  Change default package manager.
+     -st, --set-template <template-name>                     Change default project template.
+    \n   Visit https://github.com/afgalvan/create-app"
     exit 0
 }
 
 templates() {
     title
-    echo -e "\nTemplates."
-    echo "   -web"
-    echo "   -python"
+    echo -e "\nTemplates:"
+    echo "   - web"
+    echo "   - python"
+    echo "   - java"
     exit 0
 }
 
@@ -150,8 +164,8 @@ defaults() {
 
     title
     echo "Default settings."
-    echo -e "   -Package manager: $pckg$RESET"
-    echo -e "   -Template: $template$RESET"
+    echo -e "   - Package manager: $pckg$RESET"
+    echo -e "   - Template: $template$RESET"
     exit 0
 }
 
@@ -259,12 +273,12 @@ main() {
     } && {
         template=$(template_format "$template")
         package_manager=$(pm_colored "$package_manager")
-        echo -e "\n\n\n\n\n\n\n\n\n\n"
+        echo -e "\n\n\n\n\n\n"
         echo -e "$GREEN✓$RESET The $template$RESET project \"$project_name\" was succesfully created with $package_manager$RESET!"
     } || {
         echo -e "$RED"
         echo "Unexpected error in the template installation."
-        echo "Try checking the requirements or your internet conection."
+        echo "Try checking the requirements."
         cd ..
         rm -rf $project_name
         exit 1
