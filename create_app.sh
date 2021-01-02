@@ -6,7 +6,7 @@ RED="\e[31m"
 GREEN="\e[32m"
 CYAN="\e[36m"
 RESET="\e[0m"
-VERSION="v.0.1-alpha"
+VERSION="v.0.2-alpha"
 
 title() {
     echo -e "$BLUE"
@@ -181,13 +181,14 @@ template_setup() {
         cd "$project_name"
         echo "# $project_name" > README.md
         rm -rf .git/
-        return 1
         git init
         git checkout -b main
         "$package_manager" install --silent
     } || {
         echo -e "$RED"
         echo -e "The template installation has failed due a git error."
+        cd ..
+        rm -rf $project_name
         exit 1
     }
 }
@@ -209,7 +210,6 @@ main() {
         package_manager=$(default_package_manager)
     fi
     is_package_manager_valid "$package_manager"
-    package_manager=$(pm_colored "$package_manager")
 
     # Check template argument
     if [ -z "$template" ]; then
@@ -221,6 +221,7 @@ main() {
         template_setup "$project_name" "$package_manager" "$template"
     } && {
         template=$(template_format "$template")
+        package_manager=$(pm_colored "$package_manager")
         echo -e "\n\n\n\n\n\n\n\n\n\n"
         echo -e "$GREEN✓$RESET The $template$RESET project \"$project_name\" was succesfully created with $package_manager$RESET!"
     } || {
