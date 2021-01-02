@@ -172,19 +172,24 @@ template_setup() {
     local project_name="$1"
     local package_manager="$2"
     local template="$3"
-    # local repo_url=https://github.com/afgalvan/create-app.git
-
+    local repo_url=https://github.com/afgalvan/create-app.git
     title
     sleep 1.3
-    # git clone -b "$template" -q "$repo_url" "$project_name"
-    # cd "$project_name"
-    # echo "# $project_name" > README.md
-    # rm -rf .git/
-    # git init
-    # git checkout -b main
-    # "$package_manager" install --silent
-    echo -e "\n\n\n\n\n\n\n\n\n\n"
-    echo -e "$GREEN✓$RESET The $template$RESET project \"$project_name\" was succesfully created with $package_manager$RESET!"
+    {
+        git clone -b "$template" -q "$repo_url" "$project_name"
+    } && {
+        cd "$project_name"
+        echo "# $project_name" > README.md
+        rm -rf .git/
+        return 1
+        git init
+        git checkout -b main
+        "$package_manager" install --silent
+    } || {
+        echo -e "$RED"
+        echo -e "The template installation has failed due a git error."
+        exit 1
+    }
 }
 
 main() {
@@ -212,8 +217,20 @@ main() {
         # template=$(default_template)
     fi
     is_template_valid "$template"
-    template=$(template_format "$template")
-    template_setup "$project_name" "$package_manager" "$template"
+    {
+        template_setup "$project_name" "$package_manager" "$template"
+    } && {
+        template=$(template_format "$template")
+        echo -e "\n\n\n\n\n\n\n\n\n\n"
+        echo -e "$GREEN✓$RESET The $template$RESET project \"$project_name\" was succesfully created with $package_manager$RESET!"
+    } || {
+        echo -e "$RED"
+        echo "Unexpected error in the template installation."
+        echo "Try checking the requirements or your internet conection."
+        cd ..
+        rm -rf $project_name
+        exit 1
+    }
 }
 
 main "$@"
