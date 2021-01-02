@@ -174,7 +174,6 @@ template_setup() {
     local template="$3"
     local repo_url=https://github.com/afgalvan/create-app.git
     title
-    sleep 1.3
     {
         git clone -b "$template" -q "$repo_url" "$project_name"
     } && {
