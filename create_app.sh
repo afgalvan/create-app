@@ -7,20 +7,29 @@ GREEN="\e[32m"
 CYAN="\e[36m"
 RESET="\e[0m"
 VERSION="v.0.2-alpha"
+settings=()
 
 title() {
     echo -e "$BLUE"
     echo -e "create-app \e[7;34m $VERSION$RESET"
 }
 
-default_package_manager() {
-    local config="$HOME/.config/create-app/default_pm"
+default_settings() {
+    local config="$HOME/.config/create-app/defaults"
+    local i=0
 
     while IFS= read -r line
     do
-        pckg="$line"
+        i=$((i + 1))
+        case "$i" in
+        1)
+            settings[0]="$line"
+            ;;
+        2)
+            settings[1]="$line"
+            ;;
+        esac
     done < "$config"
-    echo "$pckg"
 }
 
 pm_colored() {
@@ -31,6 +40,37 @@ pm_colored() {
     else
         echo "$CYAN$package_manager"
     fi
+}
+
+template_format() {
+    local template="$1"
+
+    case $template in
+    "web")
+        echo -e "$YELLOW$template"
+        ;;
+    "javascript" | "js")
+        template="JavaScript"
+        echo -e "$YELLOW"
+        ;;
+    "py" | "python")
+        template="Python"
+        echo -e "$YELLOW$template"
+        ;;
+    "typescript" | "ts")
+        template="TypeScript"
+        echo -e "$BLUE$template"
+        ;;
+    "go")
+        echo -e "$BLUE$template"
+        ;;
+    "java")
+        echo -e "$RED$template"
+        ;;
+    *)
+        echo "$template"
+        ;;
+    esac
 }
 
 is_package_manager_valid() {
@@ -70,28 +110,54 @@ templates() {
 }
 
 change_package_manager() {
+    default_settings
     local package_manager="$1"
+    settings[0]="$package_manager"
 
     is_package_manager_valid "$package_manager"
-    echo "$package_manager" > "$HOME/.config/create-app/default_pm"
+    update_config
     package_manager=$(pm_colored "$package_manager")
     echo -e "Default package manager changed to $package_manager$RESET."
     exit 0
 }
 
+change_template() {
+    default_settings
+    local template="$1"
+    settings[1]="$template"
+
+    is_template_valid "$template"
+    update_config
+    template=$(template_format "$template")
+    echo -e "Default package manager changed to $template$RESET."
+    exit 0
+}
+
+update_config() {
+    rm -f $HOME/.config/create-app/defaults
+
+    for i in "${settings[@]}"; do
+        echo "$i" >> "$HOME/.config/create-app/defaults";
+    done
+}
+
 defaults() {
-    local pckg=$(default_package_manager)
+    default_settings
+    local pckg=${settings[0]}
+    local template=${settings[1]}
     local pckg=$(pm_colored "$pckg")
+    local template=$(template_format "$template")
 
     title
     echo "Default settings."
     echo -e "   -Package manager: $pckg$RESET"
-    echo -e "   -Template: web"
+    echo -e "   -Template: $template$RESET"
     exit 0
 }
 
 config_args() {
     local arg="$1"
+    local opt="$2"
 
     case $arg in
     "--help" | "-h")
@@ -101,7 +167,10 @@ config_args() {
         templates
         ;;
     "--set-package-manager" | "--set-pm" | "-sp")
-        change_package_manager "$package_manager"
+        change_package_manager "$opt"
+        ;;
+    "--set-template" | "-st")
+        change_template "$opt"
         ;;
     "--version" | "-v")
         echo "create-app $VERSION"
@@ -137,37 +206,6 @@ is_project_valid() {
     fi
 }
 
-template_format() {
-    local template="$1"
-
-    case $template in
-    "web")
-        echo -e "$YELLOW$template"
-        ;;
-    "javascript" | "js")
-        template="JavaScript"
-        echo -e "$YELLOW"
-        ;;
-    "py" | "python")
-        template="Python"
-        echo -e "$YELLOW$template"
-        ;;
-    "typescript" | "ts")
-        template="TypeScript"
-        echo -e "$BLUE$template"
-        ;;
-    "go")
-        echo -e "$BLUE$template"
-        ;;
-    "java")
-        echo -e "$RED$template"
-        ;;
-    *)
-        echo "$template"
-        ;;
-    esac
-}
-
 template_setup() {
     local project_name="$1"
     local package_manager="$2"
@@ -196,24 +234,24 @@ main() {
     local project_name="$1"
     local package_manager="$2"
     local template="$3"
+    default_settings
 
     # Check for config arguments
     if [[ "$project_name" =~ ^- ]]; then
-        config_args "$project_name"
+        config_args "$project_name" "$package_manager"
     fi
 
     is_project_valid "$project_name"
 
     # Check package manager argument
     if [ -z "$package_manager" ]; then
-        package_manager=$(default_package_manager)
+        package_manager=${settings[0]}
     fi
     is_package_manager_valid "$package_manager"
 
     # Check template argument
     if [ -z "$template" ]; then
-        template="web"
-        # template=$(default_template)
+        template=${settings[1]}
     fi
     is_template_valid "$template"
     {
