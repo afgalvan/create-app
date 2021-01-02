@@ -3,11 +3,14 @@
 Basic template manager.
 
 ## Requiriments.
-
 - [git](https://git-scm.com/downloads) ^2.x.
-- [node](https://nodejs.org/en/download/) ^12.18.4
+
+**Template manager.**
 - [curl](https://curl.se/download.html)
 - [wget](https://www.gnu.org/software/wget/)
+
+**To install templates.**
+- [node](https://nodejs.org/en/download/) ^12.18.4
 - A node package manager.
   - [yarn](https://classic.yarnpkg.com/en/docs/install/) ^1.x
   - [npm](https://www.npmjs.com/get-npm) ^6.x
