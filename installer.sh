@@ -19,7 +19,8 @@ else
     is_package_manager_valid "$1"
     pm="$1"
 fi
-echo "$pm" > ~/.config/create-app/default_pm
+echo "$pm" > ~/.config/create-app/defaults
+echo "web" >> ~/.config/create-app/defaults
 
 if [ -d ~/.config/create-app/create_app.sh ]; then
     rm -f ~/.config/create-app/create_app.sh
