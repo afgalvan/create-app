@@ -1,6 +1,6 @@
-# create-app.
+# **create-app.**
 
-Basic project template.
+Basic template manager.
 
 ## Requiriments.
 
@@ -14,23 +14,33 @@ Basic project template.
 
 ---
 
-## To install template manager (create-app).
+## **To install template manager (create-app).**
 
-Install it with curl:
-
-```
-curl -sL https://raw.githubusercontent.com/afgalvan/create-app/web/installer.sh | bash -s
-```
-
-Create a new alias
+### **Install it with curl:**
 
 ```
-echo "alias create-app=$HOME/.config/create-app/create_app.sh" >> ~/.bashrc
+curl -sL https://raw.githubusercontent.com/afgalvan/create-app/web/installer.sh | bash -s [package-manager]
 ```
+
+The package-manager argument it's optional, **npm** is configured by default.
+
+### **Create a new alias:**
+
+bash
+
+> ```
+> echo "alias create-app=\"~/.config/create-app/create_app.sh\"" >> ~/.bashrc
+> ```
+
+zsh
+
+> ```
+> echo "alias create-app=\"~/.config/create-app/create_app.sh\"" >> ~/.zshrc
+> ```
 
 ---
 
-## Manually specific template download.
+## **Manually specific template download.**
 
 ### 1. Get the template.
 
