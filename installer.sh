@@ -11,7 +11,12 @@ is_package_manager_valid() {
 
 echo -e "\e[34m create-app \e[7;34m installer \e[0m"
 mkdir -p ~/.config/create-app
-wget https://raw.githubusercontent.com/afgalvan/create-app/main/create_app.sh
+if [ -z "$2" ]; then
+    branch="main"
+else
+    branch="$2"
+fi
+wget https://raw.githubusercontent.com/afgalvan/create-app/"$branch"/create_app.sh
 chmod +x create_app.sh
 if [ -z "$1" ]; then
     pm="npm"
