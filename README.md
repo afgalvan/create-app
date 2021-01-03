@@ -25,7 +25,7 @@ To install templates.
 ### **Install it with curl:**
 
 ```
-curl -sL https://raw.githubusercontent.com/afgalvan/create-app/main/installer.sh | bash -s [package-manager]
+curl -sL https://raw.githubusercontent.com/afgalvan/create-app/main/installer.sh | bash -s [package-manager] [branch]
 ```
 
 The package-manager argument it's optional, **npm** is configured by default.
