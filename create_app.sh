@@ -234,7 +234,7 @@ template_setup() {
         rm -rf .git/
         git init
         git checkout -b main
-        "$package_manager" install --silent
+        bash setup.sh "$package_manager"
     } || {
         echo -e "$RED"
         echo -e "The template installation has failed due a git error."
