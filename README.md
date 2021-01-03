@@ -3,13 +3,16 @@
 Basic template manager.
 
 ## Requiriments.
+
 - [git](https://git-scm.com/downloads) ^2.x.
 
 For the template manager.
+
 - [curl](https://curl.se/download.html)
 - [wget](https://www.gnu.org/software/wget/)
 
 To install templates.
+
 - [node](https://nodejs.org/en/download/) ^12.18.4
 - A node package manager.
   - [yarn](https://classic.yarnpkg.com/en/docs/install/) ^1.x
@@ -22,7 +25,7 @@ To install templates.
 ### **Install it with curl:**
 
 ```
-curl -sL https://raw.githubusercontent.com/afgalvan/create-app/web/installer.sh | bash -s [package-manager]
+curl -sL https://raw.githubusercontent.com/afgalvan/create-app/main/installer.sh | bash -s [package-manager]
 ```
 
 The package-manager argument it's optional, **npm** is configured by default.
