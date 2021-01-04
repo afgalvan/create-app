@@ -2,7 +2,7 @@
 
 Basic template manager.
 
-## Requiriments.
+## Requirements.
 
 - [git](https://git-scm.com/downloads) ^2.x.
 
