@@ -157,15 +157,15 @@ update_config() {
 
 defaults() {
     default_settings
-    local pckg=${settings[0]}
-    local template=${settings[1]}
-    local pckg=$(pm_format "$pckg")
+    local template=${settings[0]}
+    local pckg=${settings[1]}
     local template=$(template_format "$template")
+    local pckg=$(pm_format "$pckg")
 
     title
     echo "Default settings."
-    echo -e "   - Package manager: $pckg$RESET"
     echo -e "   - Template: $template$RESET"
+    echo -e "   - Package manager: $pckg$RESET"
     exit 0
 }
 

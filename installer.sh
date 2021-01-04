@@ -37,7 +37,7 @@ fi
 if [ -z "$2" ]; then
     pm="npm"
 else
-    is_package_manager_valid "$1"
+    is_package_manager_valid "$2"
     pm="$2"
 fi
 
