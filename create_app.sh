@@ -32,7 +32,7 @@ default_settings() {
     done < "$config"
 }
 
-pm_colored() {
+pm_format() {
     local package_manager="$1"
 
     if [ "$package_manager" == "npm" ]; then
@@ -73,15 +73,6 @@ template_format() {
     esac
 }
 
-is_package_manager_valid() {
-    local package_manager="$1"
-
-    if [ "$package_manager" != "npm" ] && [ "$package_manager" != "yarn" ]; then
-        echo -e "$RED Error on package manager name \"$package_manager\"."
-        exit 1
-    fi
-}
-
 is_template_valid() {
     local template="$1"
 
@@ -93,6 +84,15 @@ is_template_valid() {
         return 0
     else
         echo -e "$RED Error on template name \"$template\"."
+        exit 1
+    fi
+}
+
+is_package_manager_valid() {
+    local package_manager="$1"
+
+    if [ "$package_manager" != "npm" ] && [ "$package_manager" != "yarn" ]; then
+        echo -e "$RED Error on package manager name \"$package_manager\"."
         exit 1
     fi
 }
@@ -123,27 +123,27 @@ templates() {
     exit 0
 }
 
-change_package_manager() {
-    default_settings
-    local package_manager="$1"
-    settings[0]="$package_manager"
-
-    is_package_manager_valid "$package_manager"
-    update_config
-    package_manager=$(pm_colored "$package_manager")
-    echo -e "Default package manager changed to $package_manager$RESET."
-    exit 0
-}
-
 change_template() {
     default_settings
     local template="$1"
-    settings[1]="$template"
+    settings[0]="$template"
 
     is_template_valid "$template"
     update_config
     template=$(template_format "$template")
     echo -e "Default package manager changed to $template$RESET."
+    exit 0
+}
+
+change_package_manager() {
+    default_settings
+    local package_manager="$1"
+    settings[1]="$package_manager"
+
+    is_package_manager_valid "$package_manager"
+    update_config
+    package_manager=$(pm_format "$package_manager")
+    echo -e "Default package manager changed to $package_manager$RESET."
     exit 0
 }
 
@@ -159,7 +159,7 @@ defaults() {
     default_settings
     local pckg=${settings[0]}
     local template=${settings[1]}
-    local pckg=$(pm_colored "$pckg")
+    local pckg=$(pm_format "$pckg")
     local template=$(template_format "$template")
 
     title
@@ -273,7 +273,7 @@ main() {
         template_setup "$project_name" "$package_manager" "$template"
     } && {
         template=$(template_format "$template")
-        package_manager=$(pm_colored "$package_manager")
+        package_manager=$(pm_format "$package_manager")
         echo -e "\n\n\n\n\n\n"
         echo -e "$GREEN✓$RESET The $template$RESET project \"$project_name\" was succesfully created with $package_manager$RESET!"
     } || {
