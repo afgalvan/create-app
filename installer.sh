@@ -18,14 +18,14 @@ else
 fi
 wget https://raw.githubusercontent.com/afgalvan/create-app/"$branch"/create_app.sh
 chmod +x create_app.sh
-if [ -z "$1" ]; then
+if [ -z "$2" ]; then
     pm="npm"
 else
     is_package_manager_valid "$1"
-    pm="$1"
+    pm="$2"
 fi
-echo "$pm" > ~/.config/create-app/defaults
-echo "web" >> ~/.config/create-app/defaults
+echo "web" > ~/.config/create-app/defaults
+echo "$pm" >> ~/.config/create-app/defaults
 
 if [ -d ~/.config/create-app/create_app.sh ]; then
     rm -f ~/.config/create-app/create_app.sh

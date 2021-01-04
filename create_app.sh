@@ -108,8 +108,8 @@ prompt_help() {
      -v, --version                                           Show create-app current version.
      -d, --defaults                                          Show your default settings.
      -t, --templates                                         Show available templates to use.
-     -sp, --set-package-manager, --set-pm <package-manager>  Change default package manager.
      -st, --set-template <template-name>                     Change default project template.
+     -sp, --set-package-manager, --set-pm <package-manager>  Change default package manager.
     \n   Visit https://github.com/afgalvan/create-app"
     exit 0
 }
@@ -246,8 +246,8 @@ template_setup() {
 
 main() {
     local project_name="$1"
-    local package_manager="$2"
-    local template="$3"
+    local template="$2"
+    local package_manager="$3"
     default_settings
 
     # Check for config arguments
@@ -257,17 +257,18 @@ main() {
 
     is_project_valid "$project_name"
 
+    # Check template argument
+    if [ -z "$template" ]; then
+        template=${settings[0]}
+    fi
+    is_template_valid "$template"
+
     # Check package manager argument
     if [ -z "$package_manager" ]; then
-        package_manager=${settings[0]}
+        package_manager=${settings[1]}
     fi
     is_package_manager_valid "$package_manager"
 
-    # Check template argument
-    if [ -z "$template" ]; then
-        template=${settings[1]}
-    fi
-    is_template_valid "$template"
     {
         template_setup "$project_name" "$package_manager" "$template"
     } && {
