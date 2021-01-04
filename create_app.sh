@@ -99,7 +99,7 @@ is_package_manager_valid() {
 
 prompt_help() {
     title
-    echo -e "\n   Usage: create-app <project-name> [package-manager] [template]"
+    echo -e "\n   Usage: create-app <project-name> [template] [package-manager]"
     echo "   If optional arguments are not provide, it will use your default settings."
 
     echo -e "\n   Help information"
