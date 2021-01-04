@@ -154,3 +154,5 @@ yarn.lock
 
 # and uncomment the following lines
 # .pnp.*
+tests/
+__pycache__
