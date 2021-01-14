@@ -20,12 +20,18 @@ To install templates.
 
 ---
 
+## Usage
+
+```
+create-app <project-name> [template] [package-manager](for web projects)
+```
+
 ## **To install template manager (create-app).**
 
 ### **Install it with curl:**
 
 ```
-curl -sL https://raw.githubusercontent.com/afgalvan/create-app/main/installer.sh | bash -s [package-manager] [branch]
+curl -sL https://raw.githubusercontent.com/afgalvan/create-app/main/installer.sh | bash -s  [branch] [package-manager]
 ```
 
 The package-manager argument it's optional, **npm** is configured by default.
