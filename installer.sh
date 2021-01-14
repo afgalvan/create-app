@@ -1,10 +1,10 @@
 #!/bin/bash
 
-is_package_manager_valid() {
-    local package_manager="$1"
+is_valid_option() {
+    local option="$1"
 
-    if [ "$package_manager" != "npm" ] && [ "$package_manager" != "yarn" ]; then
-        echo -e "\e[31m Error on package manager name \"$package_manager\"."
+    if [ "$option" != "$2" ] && [ "$option" != "$3" ]; then
+        echo -e "\e[31m Error on $4 name \"$option\"."
         exit 1
     fi
 }
@@ -12,8 +12,8 @@ is_package_manager_valid() {
 install_app() {
     pm="$1"
 
-    mkdir -p ~/.config/create-app
     chmod +x create_app.sh
+    mkdir -p ~/.config/create-app
     echo "web" > ~/.config/create-app/defaults
     echo "$pm" >> ~/.config/create-app/defaults
 
@@ -32,13 +32,14 @@ if [ -z "$1" ]; then
     branch="main"
 else
     branch="$1"
+    is_valid_option "$branch" "main" "development" "branch"
 fi
 
 if [ -z "$2" ]; then
     pm="npm"
 else
-    is_package_manager_valid "$2"
     pm="$2"
+    is_valid_option "$pm" "npm" "yarn" "package manager"
 fi
 
 {
