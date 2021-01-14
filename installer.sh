@@ -4,7 +4,7 @@ is_valid_option() {
     local option="$1"
 
     if [ "$option" != "$2" ] && [ "$option" != "$3" ]; then
-        echo -e "\e[31m Error on $4 name \"$option\"."
+        echo -e "\e[31mError on $4 name \"$option\"."
         exit 1
     fi
 }
@@ -26,7 +26,6 @@ install_app() {
     echo -e "$ echo \"alias create-app=~/.config/create-app/create_app.sh\" >> ~/.bashrc"
 }
 
-echo -e "\e[34m create-app \e[7;34m installer \e[0m"
 
 if [ -z "$1" ]; then
     branch="main"
@@ -42,6 +41,7 @@ else
     is_valid_option "$pm" "npm" "yarn" "package manager"
 fi
 
+echo -e "\e[34mcreate-app \e[7;34m installer \e[0m"
 {
     wget https://raw.githubusercontent.com/afgalvan/create-app/"$branch"/create_app.sh
 } && {
@@ -50,4 +50,3 @@ fi
     echo -e "\e[31m Error downloading create-app from the repository."
     exit 0
 }
-
