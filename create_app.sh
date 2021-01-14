@@ -5,16 +5,17 @@ BLUE="\e[34m"
 RED="\e[31m"
 GREEN="\e[32m"
 CYAN="\e[36m"
+BOLD="\e[1m"
 RESET="\e[0m"
 VERSION="v.0.2.1-alpha"
 settings=()
 
 title() {
-    echo -e "$BLUE"
-    echo -e "create-app \e[7;34m $VERSION$RESET"
+    echo -e "$BLUE$BOLD"
+    echo -e "create-app \e[7;34m $VERSION $RESET"
 }
 
-default_settings() {
+load_settings() {
     local config="$HOME/.config/create-app/defaults"
     local i=0
 
@@ -35,11 +36,20 @@ default_settings() {
 pm_format() {
     local package_manager="$1"
 
-    if [ "$package_manager" == "npm" ]; then
-        echo "$RED$package_manager"
-    else
-        echo "$CYAN$package_manager"
-    fi
+    case $package_manager in
+    "npm")
+        echo -e "$RED$package_manager"
+        ;;
+    "pipenv")
+        echo -e "$YELLOW$package_manager"
+        ;;
+    "yarn")
+        echo -e "$CYAN$package_manager"
+        ;;
+    *)
+        echo "$package_manager"
+        ;;
+    esac
 }
 
 template_format() {
@@ -51,7 +61,7 @@ template_format() {
         ;;
     "javascript" | "js")
         template="JavaScript"
-        echo -e "$YELLOW"
+        echo -e "$YELLOW$template"
         ;;
     "py" | "python")
         template="Python"
@@ -83,7 +93,9 @@ is_template_valid() {
     elif [ "$template" == "java" ]; then
         return 0
     else
-        echo -e "$RED Error on template name \"$template\"."
+        echo -e "$RED"
+        echo -e "Error on template name \"$template\".$RESET"
+        templates
         exit 1
     fi
 }
@@ -92,17 +104,19 @@ is_package_manager_valid() {
     local package_manager="$1"
 
     if [ "$package_manager" != "npm" ] && [ "$package_manager" != "yarn" ]; then
-        echo -e "$RED Error on package manager name \"$package_manager\"."
+        echo -e "$RED"
+        echo -e "Error on package manager name \"$package_manager\".$RESET"
+        echo -e "You meant$RED npm$RESET or$BLUE yarn$RESET?"
         exit 1
     fi
 }
 
 prompt_help() {
-    title
-    echo -e "\n   Usage: create-app <project-name> [template] [package-manager]"
-    echo "   If optional arguments are not provide, it will use your default settings."
-
     echo -e "\n   Help information"
+    echo -e "\n   Usage: create-app <project-name> [template] [package-manager]"
+    echo -e "  $GREEN create-app$RESET awesome_project python"
+    echo "   If optional arguments are not provide, your default settings will be used."
+
     echo -e "\n   Commands:"
     echo -e "     -h, --help                                              Displays help information for command usage.
      -v, --version                                           Show create-app current version.
@@ -115,16 +129,14 @@ prompt_help() {
 }
 
 templates() {
-    title
     echo -e "\nTemplates:"
     echo "   - web"
     echo "   - python"
-    echo "   - java"
+    echo "   - java (Soon)"
     exit 0
 }
 
 change_template() {
-    default_settings
     local template="$1"
     settings[0]="$template"
 
@@ -136,7 +148,6 @@ change_template() {
 }
 
 change_package_manager() {
-    default_settings
     local package_manager="$1"
     settings[1]="$package_manager"
 
@@ -156,13 +167,12 @@ update_config() {
 }
 
 defaults() {
-    default_settings
+    load_settings
     local template=${settings[0]}
     local pckg=${settings[1]}
     local template=$(template_format "$template")
     local pckg=$(pm_format "$pckg")
 
-    title
     echo "Default settings."
     echo -e "   - Template: $template$RESET"
     echo -e "   - Package manager: $pckg$RESET"
@@ -187,7 +197,6 @@ config_args() {
         change_template "$opt"
         ;;
     "--version" | "-v")
-        echo "create-app $VERSION"
         exit 0
         ;;
     "--defaults" | "-d")
@@ -207,9 +216,7 @@ is_project_valid() {
 
     # Check for any project name argument
     if [ -z "$project_name" ]; then
-        echo "$project_name"
-        echo -e "$RED Project name flag not provided."
-        exit 1
+        prompt_help
     fi
     # Check if the folder already exists
     if [ -d "$project_name" ]; then
@@ -225,7 +232,7 @@ template_setup() {
     local package_manager="$2"
     local template="$3"
     local repo_url=https://github.com/afgalvan/create-app.git
-    title
+
     {
         git clone -b "$template" -q "$repo_url" "$project_name"
     } && {
@@ -248,7 +255,8 @@ main() {
     local project_name="$1"
     local template="$2"
     local package_manager="$3"
-    default_settings
+    load_settings
+    title
 
     # Check for config arguments
     if [[ "$project_name" =~ ^- ]]; then
@@ -268,6 +276,9 @@ main() {
         package_manager=${settings[1]}
     fi
     is_package_manager_valid "$package_manager"
+    if [ "$template" == "python" ]; then
+        package_manager="pipenv"
+    fi
 
     {
         template_setup "$project_name" "$package_manager" "$template"
