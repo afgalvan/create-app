@@ -21,15 +21,8 @@ load_settings() {
 
     while IFS= read -r line
     do
-        i=$((i + 1))
-        case "$i" in
-        1)
-            settings[0]="$line"
-            ;;
-        2)
-            settings[1]="$line"
-            ;;
-        esac
+        settings[("$i")]="$line"
+        i=$(( $i + 1 ))
     done < "$config"
 }
 
@@ -106,7 +99,7 @@ is_package_manager_valid() {
     if [ "$package_manager" != "npm" ] && [ "$package_manager" != "yarn" ]; then
         echo -e "$RED"
         echo -e "Error on package manager name \"$package_manager\".$RESET"
-        echo -e "You meant$RED npm$RESET or$BLUE yarn$RESET?"
+        echo -e "You meant$RED npm$RESET or$CYAN yarn$RESET?"
         exit 1
     fi
 }
@@ -133,7 +126,6 @@ templates() {
     echo "   - web"
     echo "   - python"
     echo "   - java (Soon)"
-    exit 0
 }
 
 change_template() {
@@ -167,7 +159,6 @@ update_config() {
 }
 
 defaults() {
-    load_settings
     local template=${settings[0]}
     local pckg=${settings[1]}
     local template=$(template_format "$template")
@@ -189,6 +180,7 @@ config_args() {
         ;;
     "--templates" | "-t")
         templates
+        exit 0
         ;;
     "--set-package-manager" | "--set-pm" | "-sp")
         change_package_manager "$opt"
@@ -260,7 +252,7 @@ main() {
 
     # Check for config arguments
     if [[ "$project_name" =~ ^- ]]; then
-        config_args "$project_name" "$package_manager"
+        config_args "$project_name" "$2"
     fi
 
     is_project_valid "$project_name"
