@@ -105,10 +105,10 @@ is_package_manager_valid() {
 }
 
 prompt_help() {
-    echo -e "\n   Help information"
+    echo -e "\n  $BOLD \e[97mHelp information.$RESET"
     echo -e "\n   Usage: create-app <project-name> [template] [package-manager]"
-    echo -e "  $GREEN create-app$RESET awesome_project python"
-    echo "   If optional arguments are not provide, your default settings will be used."
+    echo -e "   Example: $GREEN create-app$RESET awesome_project python"
+    echo "   Note: If optional arguments are not provide, your default settings will be used."
 
     echo -e "\n   Commands:"
     echo -e "     -h, --help                                              Displays help information for command usage.
@@ -118,7 +118,6 @@ prompt_help() {
      -st, --set-template <template-name>                     Change default project template.
      -sp, --set-package-manager, --set-pm <package-manager>  Change default package manager.
     \n   Visit https://github.com/afgalvan/create-app"
-    exit 0
 }
 
 templates() {
@@ -136,7 +135,6 @@ change_template() {
     update_config
     template=$(template_format "$template")
     echo -e "Default package manager changed to $template$RESET."
-    exit 0
 }
 
 change_package_manager() {
@@ -147,7 +145,6 @@ change_package_manager() {
     update_config
     package_manager=$(pm_format "$package_manager")
     echo -e "Default package manager changed to $package_manager$RESET."
-    exit 0
 }
 
 update_config() {
@@ -167,7 +164,6 @@ defaults() {
     echo "Default settings."
     echo -e "   - Template: $template$RESET"
     echo -e "   - Package manager: $pckg$RESET"
-    exit 0
 }
 
 config_args() {
@@ -180,7 +176,6 @@ config_args() {
         ;;
     "--templates" | "-t")
         templates
-        exit 0
         ;;
     "--set-package-manager" | "--set-pm" | "-sp")
         change_package_manager "$opt"
@@ -189,7 +184,6 @@ config_args() {
         change_template "$opt"
         ;;
     "--version" | "-v")
-        exit 0
         ;;
     "--defaults" | "-d")
         defaults
@@ -200,6 +194,7 @@ config_args() {
         exit 1
         ;;
     esac
+    exit 0
 
 }
 
@@ -209,6 +204,7 @@ is_project_valid() {
     # Check for any project name argument
     if [ -z "$project_name" ]; then
         prompt_help
+        exit 1
     fi
     # Check if the folder already exists
     if [ -d "$project_name" ]; then
