@@ -6,17 +6,10 @@ Basic template manager.
 
 - [git](https://git-scm.com/downloads) ^2.x.
 
-For the template manager.
+For the installation.
 
 - [curl](https://curl.se/download.html)
 - [wget](https://www.gnu.org/software/wget/)
-
-To install templates.
-
-- [node](https://nodejs.org/en/download/) ^12.18.4
-- A node package manager.
-  - [yarn](https://classic.yarnpkg.com/en/docs/install/) ^1.x
-  - [npm](https://www.npmjs.com/get-npm) ^6.x
 
 ---
 
@@ -65,7 +58,7 @@ git clone -b <branchname> https://github.com/afgalvan/create-app/.git <new-proje
 or
 
 ```
-gh repo clone afgalvan/create-app <new-project-name>
+gh repo clone afgalvan/create-app <new-project-name> -- -b <branchname>
 ```
 
 ### 2. Create your own project.

@@ -21,15 +21,8 @@ load_settings() {
 
     while IFS= read -r line
     do
-        i=$((i + 1))
-        case "$i" in
-        1)
-            settings[0]="$line"
-            ;;
-        2)
-            settings[1]="$line"
-            ;;
-        esac
+        settings[("$i")]="$line"
+        i=$(( $i + 1 ))
     done < "$config"
 }
 
@@ -106,16 +99,16 @@ is_package_manager_valid() {
     if [ "$package_manager" != "npm" ] && [ "$package_manager" != "yarn" ]; then
         echo -e "$RED"
         echo -e "Error on package manager name \"$package_manager\".$RESET"
-        echo -e "You meant$RED npm$RESET or$BLUE yarn$RESET?"
+        echo -e "You meant$RED npm$RESET or$CYAN yarn$RESET?"
         exit 1
     fi
 }
 
 prompt_help() {
-    echo -e "\n   Help information"
+    echo -e "\n  $BOLD \e[97mHelp information.$RESET"
     echo -e "\n   Usage: create-app <project-name> [template] [package-manager]"
-    echo -e "  $GREEN create-app$RESET awesome_project python"
-    echo "   If optional arguments are not provide, your default settings will be used."
+    echo -e "   Example: $GREEN create-app$RESET awesome_project python"
+    echo "   Note: If optional arguments are not provide, your default settings will be used."
 
     echo -e "\n   Commands:"
     echo -e "     -h, --help                                              Displays help information for command usage.
@@ -125,7 +118,6 @@ prompt_help() {
      -st, --set-template <template-name>                     Change default project template.
      -sp, --set-package-manager, --set-pm <package-manager>  Change default package manager.
     \n   Visit https://github.com/afgalvan/create-app"
-    exit 0
 }
 
 templates() {
@@ -133,7 +125,6 @@ templates() {
     echo "   - web"
     echo "   - python"
     echo "   - java (Soon)"
-    exit 0
 }
 
 change_template() {
@@ -144,7 +135,6 @@ change_template() {
     update_config
     template=$(template_format "$template")
     echo -e "Default package manager changed to $template$RESET."
-    exit 0
 }
 
 change_package_manager() {
@@ -155,7 +145,6 @@ change_package_manager() {
     update_config
     package_manager=$(pm_format "$package_manager")
     echo -e "Default package manager changed to $package_manager$RESET."
-    exit 0
 }
 
 update_config() {
@@ -167,7 +156,6 @@ update_config() {
 }
 
 defaults() {
-    load_settings
     local template=${settings[0]}
     local pckg=${settings[1]}
     local template=$(template_format "$template")
@@ -176,7 +164,6 @@ defaults() {
     echo "Default settings."
     echo -e "   - Template: $template$RESET"
     echo -e "   - Package manager: $pckg$RESET"
-    exit 0
 }
 
 config_args() {
@@ -197,7 +184,6 @@ config_args() {
         change_template "$opt"
         ;;
     "--version" | "-v")
-        exit 0
         ;;
     "--defaults" | "-d")
         defaults
@@ -208,6 +194,7 @@ config_args() {
         exit 1
         ;;
     esac
+    exit 0
 
 }
 
@@ -217,6 +204,7 @@ is_project_valid() {
     # Check for any project name argument
     if [ -z "$project_name" ]; then
         prompt_help
+        exit 1
     fi
     # Check if the folder already exists
     if [ -d "$project_name" ]; then
@@ -260,7 +248,7 @@ main() {
 
     # Check for config arguments
     if [[ "$project_name" =~ ^- ]]; then
-        config_args "$project_name" "$package_manager"
+        config_args "$project_name" "$2"
     fi
 
     is_project_valid "$project_name"
