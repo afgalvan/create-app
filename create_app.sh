@@ -7,7 +7,7 @@ GREEN="\e[32m"
 CYAN="\e[36m"
 BOLD="\e[1m"
 RESET="\e[0m"
-VERSION="v.0.2.1-alpha"
+VERSION="v.0.3-beta"
 settings=()
 
 title() {
@@ -30,17 +30,17 @@ pm_format() {
     local package_manager="$1"
 
     case $package_manager in
-    "npm")
-        echo -e "$RED$package_manager"
+        "npm")
+            echo -e "$RED$package_manager"
         ;;
-    "pipenv")
-        echo -e "$YELLOW$package_manager"
+        "pipenv")
+            echo -e "$YELLOW$package_manager"
         ;;
-    "yarn")
-        echo -e "$CYAN$package_manager"
+        "yarn")
+            echo -e "$CYAN$package_manager"
         ;;
-    *)
-        echo "$package_manager"
+        *)
+            echo "$package_manager"
         ;;
     esac
 }
@@ -49,29 +49,29 @@ template_format() {
     local template="$1"
 
     case $template in
-    "web")
-        echo -e "$YELLOW$template"
+        "web")
+            echo -e "$YELLOW$template"
         ;;
-    "javascript" | "js")
-        template="JavaScript"
-        echo -e "$YELLOW$template"
+        "javascript" | "js")
+            template="JavaScript"
+            echo -e "$YELLOW$template"
         ;;
-    "py" | "python")
-        template="Python"
-        echo -e "$YELLOW$template"
+        "py" | "python")
+            template="Python"
+            echo -e "$YELLOW$template"
         ;;
-    "typescript" | "ts")
-        template="TypeScript"
-        echo -e "$BLUE$template"
+        "typescript" | "ts")
+            template="TypeScript"
+            echo -e "$BLUE$template"
         ;;
-    "go")
-        echo -e "$BLUE$template"
+        "go")
+            echo -e "$BLUE$template"
         ;;
-    "java")
-        echo -e "$RED$template"
+        "java")
+            echo -e "$RED$template"
         ;;
-    *)
-        echo "$template"
+        *)
+            echo "$template"
         ;;
     esac
 }
@@ -81,9 +81,9 @@ is_template_valid() {
 
     if [ "$template" == "web" ]; then
         return 0
-    elif [ "$template" == "py" ] || [ "$template" == "python" ]; then
+        elif [ "$template" == "py" ] || [ "$template" == "python" ]; then
         return 0
-    elif [ "$template" == "java" ]; then
+        elif [ "$template" == "java" ]; then
         return 0
     else
         echo -e "$RED"
@@ -171,27 +171,27 @@ config_args() {
     local opt="$2"
 
     case $arg in
-    "--help" | "-h")
-        prompt_help
+        "--help" | "-h")
+            prompt_help
         ;;
-    "--templates" | "-t")
-        templates
+        "--templates" | "-t")
+            templates
         ;;
-    "--set-package-manager" | "--set-pm" | "-sp")
-        change_package_manager "$opt"
+        "--set-package-manager" | "--set-pm" | "-sp")
+            change_package_manager "$opt"
         ;;
-    "--set-template" | "-st")
-        change_template "$opt"
+        "--set-template" | "-st")
+            change_template "$opt"
         ;;
-    "--version" | "-v")
+        "--version" | "-v")
         ;;
-    "--defaults" | "-d")
-        defaults
+        "--defaults" | "-d")
+            defaults
         ;;
-    *)
-        echo "Unknown option \"$arg\""
-        echo "    Try: create-app --help"
-        exit 1
+        *)
+            echo "Unknown option \"$arg\""
+            echo "    Try: create-app --help"
+            exit 1
         ;;
     esac
     exit 0
@@ -223,14 +223,14 @@ template_setup() {
 
     {
         git clone -b "$template" -q "$repo_url" "$project_name"
-    } && {
+        } && {
         cd "$project_name"
         echo "# $project_name" > README.md
         rm -rf .git/
         git init
         git checkout -b main
         bash setup.sh "$package_manager"
-    } || {
+        } || {
         echo -e "$RED"
         echo -e "The template installation has failed due a git error."
         cd ..
@@ -270,12 +270,12 @@ main() {
 
     {
         template_setup "$project_name" "$package_manager" "$template"
-    } && {
+        } && {
         template=$(template_format "$template")
         package_manager=$(pm_format "$package_manager")
         echo -e "\n\n\n\n\n\n"
         echo -e "$GREEN✓$RESET The $template$RESET project \"$project_name\" was succesfully created with $package_manager$RESET!"
-    } || {
+        } || {
         echo -e "$RED"
         echo "Unexpected error in the template installation."
         echo "Try checking the requirements."
