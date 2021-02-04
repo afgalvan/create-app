@@ -154,6 +154,10 @@ yarn.lock
 
 # and uncomment the following lines
 # .pnp.*
-tests/
+workspace.xml
+discord.xml
 __pycache__
+.pytest_cache
+tests/
 .idea
+dependabot.yml
