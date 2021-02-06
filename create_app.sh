@@ -243,7 +243,6 @@ main() {
     local project_name="$1"
     local template="$2"
     local package_manager="$3"
-    load_settings
     title
 
     # Check for config arguments
@@ -285,4 +284,7 @@ main() {
     }
 }
 
-main "$@"
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    load_settings
+    main "$@"
+fi
