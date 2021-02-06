@@ -47,4 +47,3 @@ jobs:
       - name: Test the alias
         run: |
           echo "alias create-app=\"~/.config/create-app/create_app.sh\"" >> ~/.bashrc
-          create-app -v
