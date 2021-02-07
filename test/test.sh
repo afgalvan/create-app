@@ -18,7 +18,7 @@ testPackageManager() {
 expected() {
     function="$1"
     title
-    $1
+    $function
 }
 
 testHelpPrompt() {
@@ -31,9 +31,18 @@ testHelpPrompt() {
 }
 
 
-testTemplateArg() {
+testTemplateListing() {
     expected=`expected templates`
     result=`main -t`
+
+    assertEquals \
+    "the result of '${result}' was wrong" \
+    "${expected}" "${result}"
+}
+
+testVersion() {
+    expected=`title`
+    result=`main -v`
 
     assertEquals \
     "the result of '${result}' was wrong" \

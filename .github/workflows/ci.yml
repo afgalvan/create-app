@@ -43,3 +43,7 @@ jobs:
 
       - name: Installer status with npm
         run: bash installer.sh main npm
+
+      - name: Test the alias
+        run: |
+          echo "alias create-app=\"~/.config/create-app/create_app.sh\"" >> ~/.bashrc
