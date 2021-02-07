@@ -71,8 +71,8 @@ expected() {
 }
 
 testHelpPrompt() {
-    expected=`expected prompt_help`
-    result=`main`
+    expected=$(expected prompt_help)
+    result=$(main)
 
     assertEquals \
     "the result of '${result}' was wrong" \
@@ -81,8 +81,8 @@ testHelpPrompt() {
 
 
 testTemplateListing() {
-    expected=`expected templates`
-    result=`main -t`
+    expected=$(expected templates)
+    result=$(main -t)
 
     assertEquals \
     "the result of '${result}' was wrong" \
@@ -90,8 +90,8 @@ testTemplateListing() {
 }
 
 testVersion() {
-    expected=`title`
-    result=`main -v`
+    expected=$(title)
+    result=$(main -v)
 
     assertEquals \
     "the result of '${result}' was wrong" \
