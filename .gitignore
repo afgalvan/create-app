@@ -161,3 +161,4 @@ tests/
 .idea
 dependabot.yml
 shunit2-2.1.6
+hooks.sh
