@@ -89,7 +89,7 @@ is_template_valid() {
         echo -e "$RED"
         echo -e "Error on template name \"$template\".$RESET"
         templates
-        exit 1
+        return 1
     fi
 }
 
@@ -100,7 +100,7 @@ is_package_manager_valid() {
         echo -e "$RED"
         echo -e "Error on package manager name \"$package_manager\".$RESET"
         echo -e "You meant$RED npm$RESET or$CYAN yarn$RESET?"
-        exit 1
+        return 1
     fi
 }
 
@@ -132,6 +132,10 @@ change_template() {
     settings[0]="$template"
 
     is_template_valid "$template"
+    if [ $? -ne 0 ]; then
+        exit 1
+    fi
+
     update_config
     template=$(template_format "$template")
     echo -e "Default package manager changed to $template$RESET."
@@ -142,6 +146,9 @@ change_package_manager() {
     settings[1]="$package_manager"
 
     is_package_manager_valid "$package_manager"
+    if [ $? -ne 0 ]; then
+        exit 1
+    fi
     update_config
     package_manager=$(pm_format "$package_manager")
     echo -e "Default package manager changed to $package_manager$RESET."
@@ -204,15 +211,17 @@ is_project_valid() {
     # Check for any project name argument
     if [ -z "$project_name" ]; then
         prompt_help
-        exit 1
+        return 1
     fi
     # Check if the folder already exists
     if [ -d "$project_name" ]; then
         if [ ! -z "$(ls "$project_name")" ]; then
             echo -e "$BLUE$project_name$RESET$RED folder exists and it's not empty."
-            exit 1
+            return 1
         fi
     fi
+
+    return 0
 }
 
 template_setup() {
@@ -251,18 +260,27 @@ main() {
     fi
 
     is_project_valid "$project_name"
+    if [ $? -ne 0 ]; then
+        exit 1
+    fi
 
     # Check template argument
     if [ -z "$template" ]; then
         template=${settings[0]}
     fi
     is_template_valid "$template"
+    if [ $? -ne 0 ]; then
+        exit 1
+    fi
 
     # Check package manager argument
     if [ -z "$package_manager" ]; then
         package_manager=${settings[1]}
     fi
     is_package_manager_valid "$package_manager"
+    if [ $? -ne 0 ]; then
+        exit 1
+    fi
     if [ "$template" == "python" ]; then
         package_manager="pipenv"
     fi
