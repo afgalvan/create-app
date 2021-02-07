@@ -13,7 +13,6 @@ testValidTemplates() {
 testPackageManager() {
     is_package_manager_valid "npm"
     is_package_manager_valid "yarn"
-    is_package_manager_valid "yadsrn"
 }
 
 expected() {
