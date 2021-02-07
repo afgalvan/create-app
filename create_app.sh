@@ -32,16 +32,16 @@ pm_format() {
     case $package_manager in
         "npm")
             echo -e "$RED$package_manager"
-            ;;
+        ;;
         "pipenv")
             echo -e "$YELLOW$package_manager"
-            ;;
+        ;;
         "yarn")
             echo -e "$CYAN$package_manager"
-            ;;
+        ;;
         *)
             echo "$package_manager"
-            ;;
+        ;;
     esac
 }
 
@@ -51,28 +51,28 @@ template_format() {
     case $template in
         "web")
             echo -e "$YELLOW$template"
-            ;;
+        ;;
         "javascript" | "js")
             template="JavaScript"
             echo -e "$YELLOW$template"
-            ;;
+        ;;
         "py" | "python")
             template="Python"
             echo -e "$YELLOW$template"
-            ;;
+        ;;
         "typescript" | "ts")
             template="TypeScript"
             echo -e "$BLUE$template"
-            ;;
+        ;;
         "go")
             echo -e "$BLUE$template"
-            ;;
+        ;;
         "java")
             echo -e "$RED$template"
-            ;;
+        ;;
         *)
             echo "$template"
-            ;;
+        ;;
     esac
 }
 
@@ -81,15 +81,15 @@ is_template_valid() {
 
     if [ "$template" == "web" ]; then
         return 0
-    elif [ "$template" == "py" ] || [ "$template" == "python" ]; then
+        elif [ "$template" == "py" ] || [ "$template" == "python" ]; then
         return 0
-    elif [ "$template" == "java" ]; then
+        elif [ "$template" == "java" ]; then
         return 0
     else
         echo -e "$RED"
         echo -e "Error on template name \"$template\".$RESET"
         templates
-        exit 1
+        return 1
     fi
 }
 
@@ -100,7 +100,7 @@ is_package_manager_valid() {
         echo -e "$RED"
         echo -e "Error on package manager name \"$package_manager\".$RESET"
         echo -e "You meant$RED npm$RESET or$CYAN yarn$RESET?"
-        exit 1
+        return 1
     fi
 }
 
@@ -132,6 +132,10 @@ change_template() {
     settings[0]="$template"
 
     is_template_valid "$template"
+    if [ $? -ne 0 ]; then
+        exit 1
+    fi
+
     update_config
     template=$(template_format "$template")
     echo -e "Default package manager changed to $template$RESET."
@@ -142,6 +146,9 @@ change_package_manager() {
     settings[1]="$package_manager"
 
     is_package_manager_valid "$package_manager"
+    if [ $? -ne 0 ]; then
+        exit 1
+    fi
     update_config
     package_manager=$(pm_format "$package_manager")
     echo -e "Default package manager changed to $package_manager$RESET."
@@ -173,26 +180,26 @@ config_args() {
     case $arg in
         "--help" | "-h")
             prompt_help
-            ;;
+        ;;
         "--templates" | "-t")
             templates
-            ;;
+        ;;
         "--set-package-manager" | "--set-pm" | "-sp")
             change_package_manager "$opt"
-            ;;
+        ;;
         "--set-template" | "-st")
             change_template "$opt"
-            ;;
+        ;;
         "--version" | "-v")
-            ;;
+        ;;
         "--defaults" | "-d")
             defaults
-            ;;
+        ;;
         *)
             echo "Unknown option \"$arg\""
             echo "    Try: create-app --help"
             exit 1
-            ;;
+        ;;
     esac
     exit 0
 
@@ -204,15 +211,17 @@ is_project_valid() {
     # Check for any project name argument
     if [ -z "$project_name" ]; then
         prompt_help
-        exit 1
+        return 1
     fi
     # Check if the folder already exists
     if [ -d "$project_name" ]; then
         if [ ! -z "$(ls "$project_name")" ]; then
             echo -e "$BLUE$project_name$RESET$RED folder exists and it's not empty."
-            exit 1
+            return 1
         fi
     fi
+
+    return 0
 }
 
 template_setup() {
@@ -251,18 +260,27 @@ main() {
     fi
 
     is_project_valid "$project_name"
+    if [ $? -ne 0 ]; then
+        exit 1
+    fi
 
     # Check template argument
     if [ -z "$template" ]; then
         template=${settings[0]}
     fi
     is_template_valid "$template"
+    if [ $? -ne 0 ]; then
+        exit 1
+    fi
 
     # Check package manager argument
     if [ -z "$package_manager" ]; then
         package_manager=${settings[1]}
     fi
     is_package_manager_valid "$package_manager"
+    if [ $? -ne 0 ]; then
+        exit 1
+    fi
     if [ "$template" == "python" ]; then
         package_manager="pipenv"
     fi
