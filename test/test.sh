@@ -30,6 +30,7 @@ testValidTemplates() {
     expected=1
     assertEquals "${expected}" "${result}"
 
+    # shellcheck disable=SC2034  # Unused variables left for readability
     isolation=$(is_template_valid)
     result=$?
     expected=1
@@ -58,6 +59,7 @@ testPackageManager() {
     expected=1
     assertEquals "${expected}" "${result}"
 
+    # shellcheck disable=SC2034  # Unused variables left for readability
     isolation=$(is_package_manager_valid)
     result=$?
     expected=1
