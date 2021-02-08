@@ -19,9 +19,9 @@ For the installation.
 create-app <project-name> [template] [package-manager] # for web projects
 ```
 
-## **To install template manager (create-app).**
+## To install template manager (create-app)
 
-### **Install it with curl:**
+### Install it with curl
 
 ```bash
 curl -sL https://raw.githubusercontent.com/afgalvan/create-app/main/installer.sh | bash -s  [branch] [package-manager]
@@ -45,7 +45,7 @@ zsh
 
 ---
 
-## **Manually specific template download.**
+## Manually specific template download
 
 ### 1. Get the template
 
