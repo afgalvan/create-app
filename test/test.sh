@@ -5,32 +5,32 @@ oneTimeSetUp() {
 }
 
 testValidTemplates() {
-    is_template_valid "web"
+    isolation=$(is_template_valid "web")
     result=$?
     expected=0
     assertEquals "${expected}" "${result}"
 
-    is_template_valid "python"
+    isolation=$(is_template_valid "python")
     result=$?
     expected=0
     assertEquals "${expected}" "${result}"
 
-    is_template_valid "java"
+    isolation=$(is_template_valid "java")
     result=$?
     expected=0
     assertEquals "${expected}" "${result}"
 
-    is_template_valid "go"
+    isolation=$(is_template_valid "go")
     result=$?
     expected=1
     assertEquals "${expected}" "${result}"
 
-    is_template_valid ""
+    isolation=$(is_template_valid "")
     result=$?
     expected=1
     assertEquals "${expected}" "${result}"
 
-    is_template_valid
+    isolation=$(is_template_valid)
     result=$?
     expected=1
     assertEquals "${expected}" "${result}"
@@ -38,27 +38,27 @@ testValidTemplates() {
 }
 
 testPackageManager() {
-    is_package_manager_valid "npm"
+    isolation=$(is_package_manager_valid "npm")
     result=$?
     expected=0
     assertEquals "${expected}" "${result}"
 
-    is_package_manager_valid "yarn"
+    isolation=$(is_package_manager_valid "yarn")
     result=$?
     expected=0
     assertEquals "${expected}" "${result}"
 
-    is_package_manager_valid "afsd"
+    isolation=$(is_package_manager_valid "afsd")
     result=$?
     expected=1
     assertEquals "${expected}" "${result}"
 
-    is_package_manager_valid ""
+    isolation=$(is_package_manager_valid "")
     result=$?
     expected=1
     assertEquals "${expected}" "${result}"
 
-    is_package_manager_valid
+    isolation=$(is_package_manager_valid)
     result=$?
     expected=1
     assertEquals "${expected}" "${result}"
