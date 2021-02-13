@@ -26,22 +26,33 @@ install_app() {
     echo -e "$ echo \"alias create-app=~/.config/create-app/create_app.sh\" >> ~/.bashrc"
 }
 
+main() {
 
-if [ -z "$1" ]; then
-    branch="main"
-else
-    branch="$1"
-    is_valid_option "$branch" "main" "development" "branch"
-fi
+    if [ -z "$1" ]; then
+        branch="main"
+    else
+        branch="$1"
+        is_valid_option "$branch" "main" "development" "branch"
+    fi
 
-if [ -z "$2" ]; then
-    pm="npm"
-else
-    pm="$2"
-    is_valid_option "$pm" "npm" "yarn" "package manager"
-fi
+    if [ -z "$2" ]; then
+        pm="npm"
+    else
+        pm="$2"
+        is_valid_option "$pm" "npm" "yarn" "package manager"
+    fi
 
-echo -e "\e[34mcreate-app \e[7;34m installer \e[0m"
-{
-    wget https://raw.githubusercontent.com/afgalvan/create-app/"$branch"/create_app.sh && install_app "$pm" || echo -e "\e[31m Error downloading create-app from the repository."; exit 0
+    echo -e "\e[34mcreate-app \e[7;34m installer \e[0m"
+    {
+        curl -O https://raw.githubusercontent.com/afgalvan/create-app/"$branch"/create_app.sh
+        } && {
+        install_app "$pm"
+        } || {
+        echo -e "\e[31m Error downloading create-app from the repository."
+        exit 1
+    }
 }
+
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    main "$@"
+fi
