@@ -43,5 +43,5 @@ fi
 
 echo -e "\e[34mcreate-app \e[7;34m installer \e[0m"
 {
-    wget https://raw.githubusercontent.com/afgalvan/create-app/"$branch"/create_app.sh && install_app "$pm" || echo -e "\e[31m Error downloading create-app from the repository."; exit 0
+    curl -O https://raw.githubusercontent.com/afgalvan/create-app/"$branch"/create_app.sh && install_app "$pm" || echo -e "\e[31m Error downloading create-app from the repository."; return 1
 }

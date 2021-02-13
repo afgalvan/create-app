@@ -9,7 +9,6 @@ Basic template manager.
 For the installation.
 
 - [curl](https://curl.se/download.html)
-- [wget](https://www.gnu.org/software/wget/)
 
 ---
 
