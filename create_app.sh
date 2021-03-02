@@ -104,6 +104,11 @@ is_package_manager_valid() {
     fi
 }
 
+update_app() {
+    package_manager=${settings[1]}
+    curl -sL https://raw.githubusercontent.com/afgalvan/create-app/main/installer.sh | bash -s  "main" [package-manager]
+}
+
 prompt_help() {
     echo -e "\n  $BOLD \e[97mHelp information.$RESET"
     echo -e "\n   Usage: create-app <project-name> [template] [package-manager]"
@@ -178,6 +183,9 @@ config_args() {
     local opt="$2"
 
     case $arg in
+        "--update" | "-u")
+            update_app
+            ;;
         "--help" | "-h")
             prompt_help
             ;;
