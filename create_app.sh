@@ -7,6 +7,7 @@ GREEN="\e[32m"
 CYAN="\e[36m"
 BOLD="\e[1m"
 RESET="\e[0m"
+MAGENTA="\e[35m"
 VERSION="v.0.3-beta"
 settings=()
 
@@ -38,6 +39,9 @@ pm_format() {
             ;;
         "yarn")
             echo -e "$CYAN$package_manager"
+            ;;
+        "intelliJ")
+            echo -e "$MAGENTA$package_manager"
             ;;
         *)
             echo "$package_manager"
@@ -120,6 +124,7 @@ prompt_help() {
      -v, --version                                           Show create-app current version.
      -d, --defaults                                          Show your default settings.
      -t, --templates                                         Show available templates to use.
+     -u, --update                                            Auto update create-app from the repository.
      -st, --set-template <template-name>                     Change default project template.
      -sp, --set-package-manager, --set-pm <package-manager>  Change default package manager.
     \n   Visit https://github.com/afgalvan/create-app"
@@ -291,6 +296,9 @@ main() {
     fi
     if [ "$template" == "python" ]; then
         package_manager="pipenv"
+    fi
+    if [ "$template" == "java" ]; then
+        package_manager="intelliJ"
     fi
 
     {
