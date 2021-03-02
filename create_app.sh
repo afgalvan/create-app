@@ -7,7 +7,8 @@ GREEN="\e[32m"
 CYAN="\e[36m"
 BOLD="\e[1m"
 RESET="\e[0m"
-VERSION="v.0.3-beta"
+MAGENTA="\e[35m"
+VERSION="v.0.4-beta"
 settings=()
 
 title() {
@@ -38,6 +39,9 @@ pm_format() {
             ;;
         "yarn")
             echo -e "$CYAN$package_manager"
+            ;;
+        "intelliJ")
+            echo -e "$MAGENTA$package_manager"
             ;;
         *)
             echo "$package_manager"
@@ -104,6 +108,11 @@ is_package_manager_valid() {
     fi
 }
 
+update_app() {
+    package_manager=${settings[1]}
+    curl -sL https://raw.githubusercontent.com/afgalvan/create-app/main/installer.sh | bash -s  "main" "$package_manager"
+}
+
 prompt_help() {
     echo -e "\n  $BOLD \e[97mHelp information.$RESET"
     echo -e "\n   Usage: create-app <project-name> [template] [package-manager]"
@@ -115,6 +124,7 @@ prompt_help() {
      -v, --version                                           Show create-app current version.
      -d, --defaults                                          Show your default settings.
      -t, --templates                                         Show available templates to use.
+     -u, --update                                            Auto update create-app from the repository.
      -st, --set-template <template-name>                     Change default project template.
      -sp, --set-package-manager, --set-pm <package-manager>  Change default package manager.
     \n   Visit https://github.com/afgalvan/create-app"
@@ -178,6 +188,9 @@ config_args() {
     local opt="$2"
 
     case $arg in
+        "--update" | "-u")
+            update_app
+            ;;
         "--help" | "-h")
             prompt_help
             ;;
@@ -234,7 +247,9 @@ template_setup() {
         git clone -b "$template" -q "$repo_url" "$project_name"
         } && {
         cd "$project_name"
-        echo "# $project_name" > README.md
+        if [ ! -f README.md ]; then
+            echo "# $project_name" > README.md
+        fi
         rm -rf .git/
         git init
         git checkout -b main
@@ -283,6 +298,9 @@ main() {
     fi
     if [ "$template" == "python" ]; then
         package_manager="pipenv"
+    fi
+    if [ "$template" == "java" ]; then
+        package_manager="intelliJ"
     fi
 
     {
