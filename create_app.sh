@@ -8,7 +8,7 @@ CYAN="\e[36m"
 BOLD="\e[1m"
 RESET="\e[0m"
 MAGENTA="\e[35m"
-VERSION="v.0.3-beta"
+VERSION="v.0.4-beta"
 settings=()
 
 title() {
