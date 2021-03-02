@@ -241,7 +241,7 @@ template_setup() {
     local project_name="$1"
     local package_manager="$2"
     local template="$3"
-    local repo_url=https://github.com/afgalvan/create-app.git
+    local repo_url=https://github.com/afgalvan/create-app-template.git
 
     {
         git clone -b "$template" -q "$repo_url" "$project_name"
