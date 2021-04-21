@@ -37,7 +37,7 @@ pm_format() {
         "pipenv")
             echo -e "$YELLOW$package_manager"
             ;;
-        "yarn")
+        "yarn" | "gradle")
             echo -e "$CYAN$package_manager"
             ;;
         "intelliJ")
@@ -71,6 +71,9 @@ template_format() {
         "go")
             echo -e "$BLUE$template"
             ;;
+        "gradle")
+            echo -e "$CYAN$template"
+            ;;
         "java")
             echo -e "$RED$template"
             ;;
@@ -87,7 +90,7 @@ is_template_valid() {
         return 0
     elif [ "$template" == "py" ] || [ "$template" == "python" ]; then
         return 0
-    elif [ "$template" == "java" ]; then
+    elif [ "$template" == "java" ] || [ "$template" == "gradle" ]; then
         return 0
     else
         echo -e "$RED"
@@ -134,7 +137,8 @@ templates() {
     echo -e "\nTemplates:"
     echo "   - web"
     echo "   - python"
-    echo "   - java (Soon)"
+    echo "   - java"
+    echo "   - gradle"
 }
 
 change_template() {
