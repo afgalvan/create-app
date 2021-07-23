@@ -38,10 +38,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build:
-    runs-on: ubuntu-20.04
     needs: beautify
+    runs-on: ubuntu-20.04
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Install shunit2
         run: curl -L "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/shunit2/shunit2-2.1.6.tgz" | tar zx
 
@@ -49,10 +52,13 @@ jobs:
         run: bash test/test.sh
 
   install:
-    runs-on: ubuntu-20.04
     needs: build
+    runs-on: ubuntu-20.04
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Installer status with yarn
         run: bash installer.sh main yarn
 
