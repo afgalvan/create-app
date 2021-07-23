@@ -38,14 +38,21 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
+    needs: beautify
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.head_ref }}
+      - name: Install shunit2
+        run: curl -L "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/shunit2/shunit2-2.1.6.tgz" | tar zx
 
+      - name: Run tests
+        run: bash test/test.sh
+
+  install:
+    runs-on: ubuntu-20.04
+    needs: build
+
+    steps:
       - name: Installer status with yarn
         run: bash installer.sh main yarn
 
@@ -55,3 +62,6 @@ jobs:
       - name: Test the alias
         run: |
           echo "alias create-app=\"~/.config/create-app/create_app.sh\"" >> ~/.bashrc
+
+      - name: Check the installation
+        run: create-app --version
