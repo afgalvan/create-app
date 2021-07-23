@@ -1,7 +1,7 @@
 #!/bin/bash
 
 oneTimeSetUp() {
-    . ./create_app.sh -d
+    . ./create_app.sh
 }
 
 testValidTemplates() {

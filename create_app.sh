@@ -53,6 +53,9 @@ template_format() {
     local template="$1"
 
     case $template in
+        "node")
+            echo -e "$GREEN$template"
+            ;;
         "web")
             echo -e "$YELLOW$template"
             ;;
@@ -86,7 +89,7 @@ template_format() {
 is_template_valid() {
     local template="$1"
 
-    if [ "$template" == "web" ]; then
+    if [ "$template" == "web" ] || [ "$template" == "node" ] ; then
         return 0
     elif [ "$template" == "py" ] || [ "$template" == "python" ]; then
         return 0
