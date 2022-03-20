@@ -56,7 +56,7 @@ template_format() {
         "node")
             echo -e "$GREEN$template"
             ;;
-        "web")
+        "web" | "esbuild")
             echo -e "$YELLOW$template"
             ;;
         "javascript" | "js")
@@ -89,7 +89,7 @@ template_format() {
 is_template_valid() {
     local template="$1"
 
-    if [ "$template" == "web" ] || [ "$template" == "node" ] ; then
+    if [ "$template" == "web" ] || [ "$template" == "node" ] || [ "$template" == "esbuild" ]; then
         return 0
     elif [ "$template" == "py" ] || [ "$template" == "python" ]; then
         return 0
